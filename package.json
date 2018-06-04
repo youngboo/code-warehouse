@@ -1,0 +1,24 @@
+{
+  "name": "code-warehouse",
+  "version": "0.0.1",
+  "description": "my first npm package",
+  "main": "base.js",
+  "scripts": {
+    "test": "npx jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.imweb.io/youngboo/adam.git"
+  },
+  "keywords": [
+    "unit",
+    "dom",
+    "debounce",
+    "array"
+  ],
+  "author": "youngboo",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^23.1.0"
+  }
+}

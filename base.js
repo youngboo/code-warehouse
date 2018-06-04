@@ -1,3 +1,4 @@
+function Base(){
 /**
  * 获取指定的 querystring 中指定 name 的 value
  * @param {String} name
@@ -7,10 +8,17 @@
  * query('hello', '?hello=js') 结果是 js
  *
  */
-function query (name, querystring) {
+ this.query =function(name, querystring) {
+  if (!(typeof querystring === 'string' && typeof name === 'string')) {
+    return undefined
+  } else {
+    let reg = new RegExp('(?=^\?' + name + '\=)')
+    let result = querystring.match(reg)
+    return result !== null ? result : undefined
+  }
+
 
 }
-
 /**
  * 序列化对象，就是把对象转成 url 字符串
  * @param {Obj} data
@@ -18,8 +26,16 @@ function query (name, querystring) {
  *
  * serialize({hello: 'js', hi: 'test'}) 结果是 ''
  */
-function serialize (data) {
+ this.serialize=function (data) {
+  let strs = ''
+  if(data instanceof Object) {
+    Object.keys(data).map((key) => {
+      str = str + key + ':"' + data[key] + '",'
+    })
+  }else{
 
+  }
+  return strs
 }
 
 /**
@@ -28,8 +44,8 @@ function serialize (data) {
  * @param {String} selector
  * @return {DOM|Null}
  */
-function $ (selector) {
-
+ this.$ =function (selector) {
+  return (selector instanceof String) ? document.querySelector(selector) : null
 }
 
 
@@ -39,8 +55,8 @@ function $ (selector) {
  * @return {DOM}
  */
 
-function removeNode (node) {
-
+ this.removeNode = function (node) {
+  return (node instanceof HTMLElement) ? node.parentNode.removeChild(node) : null
 }
 
 /**
@@ -49,8 +65,11 @@ function removeNode (node) {
  * @param {DOM} node
  * @param {DOM} target
  */
-function insertAfter (node, target) {
-
+ this.insertAfter=function (node, target) {
+  if(!(node instanceof HTMLElement) || !(target instanceof HTMLElement)){
+    return
+  }
+  node.parentNode.insertChildAfter(target, node)
 }
 
 /**
@@ -58,7 +77,7 @@ function insertAfter (node, target) {
  * @param {DOM} node
  * @param {String|Array} className
  */
-function addClass (node, className) {
+ this.addClass =function(node, className) {
 
 }
 
@@ -68,8 +87,10 @@ function addClass (node, className) {
  * @param {DOM} node
  * @param {String|Array} className
  */
-function removeClass (node, className) {
+ this.removeClass=function (node, className) {
+  if(node instanceof HTMLElement) {
 
+  }
 }
 
 /**
@@ -80,15 +101,28 @@ function removeClass (node, className) {
  * getAbsoluteUrl('/jerojiang') => 'http://imweb.io/jerojiang'
  * 在当前页面获取绝对路径，这里要创建 A 元素，测试用例看你们的了
  */
-function getAbsoluteUrl (url) {
-
+ this.getAbsoluteUrl =function (url) {
+  if(!(url instanceof String)) {
+    return null
+  }
+  return location.host + '/'+ url
 }
 
 /**
  * 防抖动
  * 防抖动函数了啦，有做个这个习题，不清楚回去复习
  */
-function debounce (callback, time) {
+ this.debounce =function(callback, time) {
+  time = time || 300
+  let timerID
+  return function () {
+    if (timerID) {
+      timerID = clearTimeout(timerID)
+    }
+    timerID = setTimeout(()=> {
+      callback.call()
+    },time)
+  }
 
 }
 
@@ -100,6 +134,18 @@ function debounce (callback, time) {
  *
  * removeItemByIndex(1, [1,2,3]) => [1, 3]
  */
-function removeItemByIndex (index, arr) {
-
+ this.removeItemByIndex =function (index, arr) {
+  if(!Array.isArray(arr)) {
+    return arr
+  }
+  if(!Number.isInteger(index)) {
+    return null
+  }
+  if(index < 0 || index > arr.length) {
+    return null
+  }
+  arr.splice(index, 1)
+  return arr
 }
+}
+module.exports = Base
