@@ -4,7 +4,8 @@
   "description": "my first npm package",
   "main": "base.js",
   "scripts": {
-    "test": "npx jest --watch",
+    "test": "npx jest",
+    "dev": "npx jest --watch",
     "coverage": "npx jest --coverage"
   },
   "repository": {
@@ -20,14 +21,14 @@
   "author": "youngboo",
   "license": "ISC",
   "devDependencies": {
-    "husky": "^0.14.3",
+    "husky": "^1.0.0-rc.8",
     "jest": "^23.1.0"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test",
+      "pre-commit": "npm run test",
       "commit-msg": "echo $HUSKY_GIT_PARAMS",
-      "pre-push": "npm test"
+      "pre-push": "npm run test"
     }
   }
 }
