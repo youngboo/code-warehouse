@@ -243,7 +243,7 @@ describe('test debounce', () => {
  * 测试根据索引移出数组的某一项
  */
 describe('test removeItemByIndex', () => {
-  test('removeItemByIndex remove null', () => {
+  test('remove null', () => {
     expect(base.removeItemByIndex(1, [])).toBeNull()
     expect(base.removeItemByIndex([], {})).toBeNull()
     expect(base.removeItemByIndex({1:0}, {})).toBeNull()
@@ -252,6 +252,13 @@ describe('test removeItemByIndex', () => {
   test('remove other', () => {
     let arr = [1,2,3]
     expect(base.removeItemByIndex(4, arr)).toBeNull()
+    expect(base.removeItemByIndex(3, arr)).toBeNull()
+    expect(base.removeItemByIndex(2, arr)).toEqual([1,2])
+    arr = [1,2,3]
+    expect(base.removeItemByIndex(1, arr)).toEqual([1,3])
+    arr = [1,2,3]
+    expect(base.removeItemByIndex(0, arr)).toEqual([2,3])
+    expect(base.removeItemByIndex(-1, arr)).toBeNull()
   })
   test('remove normal', () => {
     let arr = [1,2,3]
@@ -288,5 +295,23 @@ describe('test sleep', () => {
     base.removeItemByIndex(1, arr)
     expect(arr[0]).toBe(1)
     expect(arr.length).toBe(2)
+  })
+})
+
+/**
+ * 测试 isString
+ */
+describe('test isString', () => {
+  test('not string', () => {
+    expect(base.isString(1)).toBe(false)
+    expect(base.isString({a:1})).toBe(false)
+    expect(base.isString([1,3,4])).toBe(false)
+    expect(base.isString(/^\w$/)).toBe(false)
+  })
+  test('is string', () => {
+    expect(base.isString('adv')).toBe(true)
+    expect(base.isString(new String('aaa'))).toBe(true)
+    expect(base.isString(1+'adv')).toBe(true)
+    expect(base.isString('a'.concat('abn'))).toBe(true)
   })
 })

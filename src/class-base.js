@@ -10,7 +10,7 @@ class Base{
    */
   query (name, querystring) {
     let result = undefined
-    if((typeof querystring === 'string' && typeof name === 'string')) {
+    if((this.isString(querystring) && this.isString(name))) {
       let reg = new RegExp('\\?' + name + '=')
       if(querystring.match(reg)){
         result = querystring.replace(reg,'')
@@ -51,7 +51,7 @@ class Base{
    * @return {DOM|Null}
    */
   $ (selector) {
-    return (typeof selector === 'string') ? document.querySelector(selector) : null
+    return this.isString(selector) ? document.querySelector(selector) : null
   }
 
 
@@ -89,7 +89,7 @@ class Base{
    * @param {String|Array} className
    */
   addClass (node, className) {
-    if (!(node instanceof HTMLElement && (typeof className  === 'string' || Array.isArray(className)))) {
+    if (!(node instanceof HTMLElement && (this.isString(className) || Array.isArray(className)))) {
       return null
     }
     if (typeof className  === 'string') {
@@ -109,14 +109,14 @@ class Base{
    * @param {String|Array} className
    */
   removeClass (node, className) {
-    if (!(node instanceof HTMLElement && (typeof className  === 'string' || Array.isArray(className)))) {
+    if (!(node instanceof HTMLElement && (this.isString(className) || Array.isArray(className)))) {
       return null
     }
 
     let classArr = node.classList
     if (classArr && classArr.length > 0) {
       let list = Array.from(node.classList)
-      if (typeof className === 'string') {
+      if (this.isString(className)) {
         let index = list.indexOf(className)
         if(index >= 0) {
           node.classList.remove(className)
@@ -144,7 +144,7 @@ class Base{
    * 在当前页面获取绝对路径，这里要创建 A 元素，测试用例看你们的了
    */
   getAbsoluteUrl (url) {
-    if(!(typeof url === 'string' && url.match(/^\/\w+/))) {
+    if(!(this.isString(url) && url.match(/^\/\w+/))) {
       return null
     }
     return location.host + url
@@ -177,7 +177,7 @@ class Base{
    * removeItemByIndex(1, [1,2,3]) => [1, 3]
    */
   removeItemByIndex (index, arr) {
-    if(!(Array.isArray(arr) && Number.isInteger(index) && index >= 0 && index <= arr.length)) {
+    if(!(Array.isArray(arr) && Number.isInteger(index) && index >= 0 && index < arr.length)) {
       return null
     }
     arr.splice(index, 1)
@@ -191,6 +191,19 @@ class Base{
    */
   sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time))
+  }
+
+  /**
+   * 判断是否是字符串
+   * @param str
+   * @returns {boolean}
+   */
+  isString (str) {
+    if((typeof str).toLowerCase()  === 'string' || str instanceof String) {
+      return true
+    }else {
+      return false
+    }
   }
 }
 module.exports = Base
