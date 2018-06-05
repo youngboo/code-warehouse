@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx jest",
     "dev": "npx jest --watch",
-    "coverage": "npx jest --coverage"
+    "coverage": "npx jest --coverage",
+    "es5-convert": "babel src -d es5-src"
   },
   "repository": {
     "type": "git",
@@ -21,13 +22,26 @@
   "author": "youngboo",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
     "husky": "^1.0.0-rc.8",
-    "jest": "^23.1.0"
+    "jest": "^23.1.0",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^3.0.2",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.2"
   },
+  "files": [
+    "build",
+    "src",
+    "es5-src"
+  ],
+  "main": "build/index.js",
   "husky": {
     "hooks": {
       "pre-commit": "npm run test",
-      "commit-msg": "echo $HUSKY_GIT_PARAMS",
       "pre-push": "npm run test"
     }
   }

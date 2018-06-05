@@ -9,19 +9,14 @@ class Base{
    *
    */
   query (name, querystring) {
-    let result
-    if (!(typeof querystring === 'string' && typeof name === 'string')) {
-      return undefined
-    } else {
+    let result = undefined
+    if((typeof querystring === 'string' && typeof name === 'string')) {
       let reg = new RegExp('\\?' + name + '=')
       if(querystring.match(reg)){
         result = querystring.replace(reg,'')
       }
-
-      return result !== null ? result : undefined
     }
-
-
+    return result
   }
   /**
    * 序列化对象，就是把对象转成 url 字符串
@@ -99,7 +94,8 @@ class Base{
     }
     if (typeof className  === 'string') {
       node.classList.add(className)
-    }else if (Array.isArray(className)){
+    }
+    if (Array.isArray(className)){
       className.map((item) => {
         node.classList.add(item)
       })
@@ -115,23 +111,28 @@ class Base{
   removeClass (node, className) {
     if (!(node instanceof HTMLElement && (typeof className  === 'string' || Array.isArray(className)))) {
       return null
-    } else {
-      let classArr = node.classList
-      if (classArr && classArr.length > 0) {
-        if (typeof className === 'string') {
+    }
+
+    let classArr = node.classList
+    if (classArr && classArr.length > 0) {
+      let list = Array.from(node.classList)
+      if (typeof className === 'string') {
+        let index = list.indexOf(className)
+        if(index >= 0) {
           node.classList.remove(className)
         }
-        if (Array.isArray(className) && className.length > 0) {
-          let list = Array.from(node.classList)
-          className.map((item) => {
-            let index = list.indexOf(item)
-            if(index > 0) {
-              node.classList.remove(item)
-            }
-          })
-        }
+      }
+      if (Array.isArray(className) && className.length > 0) {
+        className.map((item) => {
+          let index = list.indexOf(item)
+          if(index >= 0) {
+            node.classList.remove(item)
+          }
+        })
       }
     }
+
+
   }
 
   /**
@@ -143,10 +144,10 @@ class Base{
    * 在当前页面获取绝对路径，这里要创建 A 元素，测试用例看你们的了
    */
   getAbsoluteUrl (url) {
-    if(!(typeof url === 'string')) {
+    if(!(typeof url === 'string' && url.match(/^\/\w+/))) {
       return null
     }
-    return location.host + '/'+ url
+    return location.host + url
   }
 
   /**
@@ -176,13 +177,7 @@ class Base{
    * removeItemByIndex(1, [1,2,3]) => [1, 3]
    */
   removeItemByIndex (index, arr) {
-    if(!Array.isArray(arr)) {
-      return null
-    }
-    if(!Number.isInteger(index)) {
-      return null
-    }
-    if(index < 0 || index > arr.length) {
+    if(!(Array.isArray(arr) && Number.isInteger(index) && index >= 0 && index <= arr.length)) {
       return null
     }
     arr.splice(index, 1)

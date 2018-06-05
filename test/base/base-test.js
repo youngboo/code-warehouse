@@ -1,14 +1,13 @@
-var base = require('../../base-factory')
-
+var base = require('../../src/index')
 /**
  * 测试获取指定的 querystring 中指定 name 的 value
  */
 describe('test query', () => {
   test('query undefined', () => {
-    expect(base.query({a:1},'aaa')).toBe(undefined)
-    expect(base.query('a',{0:'aaa'})).toBe(undefined)
-    expect(base.query('a','aaa')).toBe(undefined)
-    expect(base.query('query','?query!=test')).toBe(undefined)
+    expect(base.query({a:1},'aaa')).toBeUndefined()
+    expect(base.query('a',{0:'aaa'})).toBeUndefined()
+    expect(base.query('a','aaa')).toBeUndefined()
+    expect(base.query('query','?query!=test')).toBeUndefined()
   })
   test('query normal', () => {
     expect(base.query('a','?a=test')).toBe('test')
@@ -41,6 +40,11 @@ describe('test serialize', () => {
  * 测试dom查找器
  */
 describe('test query dom', () => {
+  test('query $() null', () => {
+    expect(base.$(123)).toBeNull()
+    expect(base.$([])).toBeNull()
+    expect(base.$({})).toBeNull()
+  })
   test('query $()', () => {
     document.body.innerHTML = '<div id="a">test</div>'
     let div = base.$('#a')
@@ -142,10 +146,24 @@ describe('test removeClass', () => {
   test('removeClass null', () => {
     document.body.innerHTML = '<div id="a"><p class="p"></p></div>'
     let notNode = document.querySelector('abc')
+    let p = document.querySelector('.p')
     expect(base.removeClass(notNode, 'aaa')).toBeNull()
     expect(base.removeClass('abec', 'aaa')).toBeNull()
+    expect(base.removeClass('abec', {})).toBeNull()
     expect(base.removeClass([], 'aaa')).toBeNull()
     expect(base.removeClass({}, 'aaa')).toBeNull()
+    base.removeClass(p, 'aaa')
+    base.removeClass(p, ['aaa'])
+    expect(p.classList.length).toBe(1)
+
+  })
+  test('removeClass classList=0', () => {
+    document.body.innerHTML = '<div id="a"><p class="p"></p></div>'
+    let d = document.querySelector('#a')
+
+    base.removeClass(d, 'aaa')
+    base.removeClass(d, ['aaa'])
+    expect(d.classList.length).toBe(0)
 
   })
   test('removeClass string', () => {
@@ -171,43 +189,53 @@ describe('test getAbsoluteUrl', () => {
     expect(base.getAbsoluteUrl(1)).toBeNull()
     expect(base.getAbsoluteUrl([])).toBeNull()
     expect(base.getAbsoluteUrl({})).toBeNull()
+    expect(base.getAbsoluteUrl('aaa')).toBeNull()
 
   })
-  // test('getAbsoluteUrl string', () => {
-  //   expect(base.getAbsoluteUrl('')).toEqual('/')
-  // })
+  test('getAbsoluteUrl string', () => {
+    expect(base.getAbsoluteUrl('/a')).toEqual('/a')
+  })
 })
 
 /**
  * 测试防抖动
  */
 describe('test debounce', () => {
-  test('debounce click', () => {
+  test('debounce click', (done) => {
     document.body.innerHTML = '<button id="btn">点击</button>'
     let btn = document.querySelector('#btn')
     let count = 0
     let debounce = base.debounce(() => {
       count ++
+      done()
+      expect(count).toBe(1)
     }, 500)
-    btn.onclick = () => {
-      let timer
-      if(timer) {
-        clearTimeout(timer)
-      }
-      timer = setTimeout(() => {
-        count ++
-      },300)
-    }
-    let time = new Date().getTime()
-    let ender = new Date().getTime() + 1000
-    while(time <= ender) {
+    btn.addEventListener('click',debounce)
+    for(var i=1; i < 10; i++) {
       btn.click()
-      time  = new Date().getTime()
     }
-    //expect(count).toBe(2)
+    expect(count).toBe(0)
   })
-  test('debounce other', () => {
 
+  test('debounce other', (done) => {
+    document.body.innerHTML = '<button id="btn">点击</button>'
+    let btn = document.querySelector('#btn')
+    let count = 0
+    let start = new Date().getTime()
+    let end
+    let debounce = base.debounce(() => {
+      count ++
+      done()
+      end = new Date().getTime()
+      expect(count).toBe(1)
+      expect(end-start).toBeGreaterThanOrEqual(300)
+      expect(end-start).toBeLessThan(350)
+    })
+    btn.addEventListener('click',debounce)
+    for(var i=1; i < 10; i++) {
+      btn.click()
+    }
+    expect(count).toBe(0)
   })
 })
 
@@ -217,13 +245,43 @@ describe('test debounce', () => {
 describe('test removeItemByIndex', () => {
   test('removeItemByIndex remove null', () => {
     expect(base.removeItemByIndex(1, [])).toBeNull()
-    expect(base.removeItemByIndex(1, {})).toBeNull()
-    expect(base.removeItemByIndex({}, {})).toBeNull()
+    expect(base.removeItemByIndex([], {})).toBeNull()
+    expect(base.removeItemByIndex({1:0}, {})).toBeNull()
     expect(base.removeItemByIndex(-1, {})).toBeNull()
   })
   test('remove other', () => {
     let arr = [1,2,3]
     expect(base.removeItemByIndex(4, arr)).toBeNull()
+  })
+  test('remove normal', () => {
+    let arr = [1,2,3]
+    base.removeItemByIndex(1, arr)
+    expect(arr[0]).toBe(1)
+    expect(arr.length).toBe(2)
+  })
+})
+
+/**
+ * 测试sleep
+ */
+describe('test sleep', () => {
+  test('sleep null', () => {
+    expect(base.removeItemByIndex(1, [])).toBeNull()
+    expect(base.removeItemByIndex(1, {})).toBeNull()
+    expect(base.removeItemByIndex({1:0}, {})).toBeNull()
+    expect(base.removeItemByIndex(-1, {})).toBeNull()
+  })
+  test('sleep 400', (done) => {
+    let start = new Date().getTime()
+    let end
+      base.sleep(400)
+      .then(() => {
+        end = new Date().getTime()
+        done()
+        expect(end-start).toBeGreaterThanOrEqual(400)
+        expect(end-start).toBeLessThan(450)
+      })
+
   })
   test('remove normal', () => {
     let arr = [1,2,3]
