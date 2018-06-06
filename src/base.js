@@ -1,4 +1,4 @@
-class Base{
+class Base {
   /**
    * 获取指定的 querystring 中指定 name 的 value
    * @param {String} name
@@ -9,11 +9,11 @@ class Base{
    *
    */
   query (name, querystring) {
-    let result = undefined
-    if((this.isString(querystring) && this.isString(name))) {
+    let result
+    if ((this.isString(querystring) && this.isString(name))) {
       let reg = new RegExp('\\?' + name + '=')
-      if(querystring.match(reg)){
-        result = querystring.replace(reg,'')
+      if (querystring.match(reg)) {
+        result = querystring.replace(reg, '')
       }
     }
     return result
@@ -31,17 +31,15 @@ class Base{
       return null
     } else {
       let length = Object.keys(data).length
-      Object.keys(data).map((key,index) => {
-        if(index === length-1){
+      Object.keys(data).map((key, index) => {
+        if (index === length - 1) {
           str = str + key + '=' + data[key]
-        }else {
+        } else {
           str = str + key + '=' + data[key] + '&'
         }
-
       })
       return str
     }
-
   }
 
   /**
@@ -53,7 +51,6 @@ class Base{
   $ (selector) {
     return this.isString(selector) ? document.querySelector(selector) : null
   }
-
 
   /**
    * 删除 DOM 节点
@@ -76,10 +73,10 @@ class Base{
       return null
     }
     let parent = target.parentNode
-    if(parent.lastChild === target) {
+    if (parent.lastChild === target) {
       parent.appendChild(node)
-    }else {
-      parent.insertBefore(node ,target.nextSibling)
+    } else {
+      parent.insertBefore(node, target.nextSibling)
     }
   }
 
@@ -92,16 +89,15 @@ class Base{
     if (!(node instanceof HTMLElement && (this.isString(className) || Array.isArray(className)))) {
       return null
     }
-    if (typeof className  === 'string') {
+    if (typeof className === 'string') {
       node.classList.add(className)
     }
-    if (Array.isArray(className)){
+    if (Array.isArray(className)) {
       className.map((item) => {
         node.classList.add(item)
       })
     }
   }
-
 
   /**
    * 移除类名
@@ -118,21 +114,19 @@ class Base{
       let list = Array.from(node.classList)
       if (this.isString(className)) {
         let index = list.indexOf(className)
-        if(index >= 0) {
+        if (index >= 0) {
           node.classList.remove(className)
         }
       }
       if (Array.isArray(className) && className.length > 0) {
         className.map((item) => {
           let index = list.indexOf(item)
-          if(index >= 0) {
+          if (index >= 0) {
             node.classList.remove(item)
           }
         })
       }
     }
-
-
   }
 
   /**
@@ -144,7 +138,7 @@ class Base{
    * 在当前页面获取绝对路径，这里要创建 A 元素，测试用例看你们的了
    */
   getAbsoluteUrl (url) {
-    if(!(this.isString(url) && url.match(/^\/\w+/))) {
+    if (!(this.isString(url) && url.match(/^\/\w+/))) {
       return null
     }
     return location.host + url
@@ -161,11 +155,10 @@ class Base{
       if (timerID) {
         timerID = clearTimeout(timerID)
       }
-      timerID = setTimeout(()=> {
+      timerID = setTimeout(() => {
         callback()
-      },time)
+      }, time)
     }
-
   }
 
   /**
@@ -177,7 +170,7 @@ class Base{
    * removeItemByIndex(1, [1,2,3]) => [1, 3]
    */
   removeItemByIndex (index, arr) {
-    if(!(Array.isArray(arr) && Number.isInteger(index) && index >= 0 && index < arr.length)) {
+    if (!(Array.isArray(arr) && Number.isInteger(index) && index >= 0 && index < arr.length)) {
       return null
     }
     arr.splice(index, 1)
@@ -199,9 +192,9 @@ class Base{
    * @returns {boolean}
    */
   isString (str) {
-    if((typeof str).toLowerCase()  === 'string' || str instanceof String) {
+    if ((typeof str).toLowerCase() === 'string' || str instanceof String) {
       return true
-    }else {
+    } else {
       return false
     }
   }

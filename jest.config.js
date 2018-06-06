@@ -1,3 +1,8 @@
 module.exports = {
-  testMatch: ['<rootDir>/test-es5/**/*.js']
+  testMatch: ['<rootDir>/test/**/*.js'],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/*.{js}',
+    '!**/node_modules/**'
+  ]
 }
