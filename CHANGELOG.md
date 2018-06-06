@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.5"></a>
+## [0.0.5](http://git.imweb.io/youngboo/adam/compare/v0.0.5-0...v0.0.5) (2018-06-06)
+
+
+
 <a name="0.0.5-0"></a>
 ## [0.0.5-0](http://git.imweb.io/youngboo/adam/compare/v0.0.4...v0.0.5-0) (2018-06-06)
 
