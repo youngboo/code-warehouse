@@ -1,8 +1,8 @@
 {
   "name": "code-warehouse",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "my first npm package",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "npx jest",
     "dev": "npx jest --watch",
@@ -10,7 +10,7 @@
     "es5-convert": "babel src -d es5-src && babel test -d es5-test",
     "release": "standard-version",
     "pre-commit": "npm run es5-convert && npm run test",
-    "pre-pull": "npm run test && npm run coverage"
+    "pre-push": "npm run test && npm run coverage"
   },
   "repository": {
     "type": "git",
@@ -38,13 +38,14 @@
     "webpack-merge": "^4.1.2"
   },
   "files": [
+    "index.js",
     "src",
     "es5-src"
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test",
-      "pre-push": "npm run test"
+      "pre-commit": "npm run pre-commit",
+      "pre-push": "npm run pre-push"
     }
   }
 }
