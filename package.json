@@ -1,6 +1,6 @@
 {
   "name": "code-warehouse",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "description": "my first npm package",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "array"
   ],
   "author": "youngboo",
-  "license": "ISC",
+  "license": "GPL",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
