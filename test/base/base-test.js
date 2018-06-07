@@ -323,3 +323,112 @@ describe('test isString', () => {
     expect(base.isString('a'.concat('abn'))).toBe(true)
   })
 })
+
+/**
+ * 测试 isEmpty
+ */
+describe('test empty', () => {
+  test('not empty', () => {
+    function Test () { this.name = 'a' }
+    let test = new Test()
+
+    expect(base.isEmpty(test)).toBe(false)
+    expect(base.isEmpty({a: 1})).toBe(false)
+    expect(base.isEmpty([1, 3, 4])).toBe(false)
+    expect(base.isEmpty(new String('abc'))).toBe(false)
+  })
+  test('empty', () => {
+    function TestEmpty () {
+    }
+    expect(base.isEmpty(TestEmpty.prototype)).toBe(true)
+    expect(base.isEmpty(new TestEmpty())).toBe(true)
+    expect(base.isEmpty(null)).toBe(true)
+    expect(base.isEmpty([])).toBe(true)
+    expect(base.isEmpty({})).toBe(true)
+    expect(base.isEmpty(undefined)).toBe(true)
+    expect(base.isEmpty(new String(''))).toBe(true)
+  })
+})
+
+/**
+ * 测试 isPrototype
+ */
+describe('test isPrototype', () => {
+  test('not Prototype', () => {
+    expect(base.isPrototype({})).toBe(false)
+    expect(base.isPrototype([1, 3, 4])).toBe(false)
+    expect(base.isPrototype('abc')).toBe(false)
+  })
+  test('isPrototype', () => {
+    function Test () {
+    }
+    expect(base.isPrototype(Test.prototype)).toBe(true)
+  })
+})
+
+/**
+ * 测试 isObject
+ */
+describe('test isObject', () => {
+  test('not isObject', () => {
+    expect(base.isObject(1)).toBe(false)
+    expect(base.isObject(null)).toBe(false)
+    expect(base.isObject(undefined)).toBe(false)
+    expect(base.isObject('abc')).toBe(false)
+  })
+  test('isObject', () => {
+    function Test () {
+    }
+    expect(base.isObject(function () {
+      return 0
+    })).toBe(true)
+    expect(base.isObject(new Test())).toBe(true)
+    expect(base.isObject(new String('abc'))).toBe(true)
+    expect(base.isObject(new Object())).toBe(true)
+  })
+})
+
+/**
+ * 测试 times
+ */
+describe('test times', () => {
+  test('not times', () => {
+    expect(base.times(-1, () => 0)).toEqual([])
+    expect(base.times(1, String)).toEqual(['0'])
+  })
+  test('times', () => {
+    expect(base.times(123, () => 0).length).toBe(123)
+  })
+})
+
+/**
+ * 测试 binaryFind
+ */
+describe('test binaryFind', () => {
+  test('binaryFind null', () => {
+    expect(base.binaryFind([1, 4, 5, 67], 2)).toBe(-1)
+    expect(base.binaryFind([-12, 30, 51], 2)).toBe(-1)
+    expect(base.binaryFind({0: 2}, 2)).toBe(-1)
+  })
+  test('binaryFind', () => {
+    let arr = [1, 2, 4, 24, 324, 234526]
+    expect(base.binaryFind(arr, 24)).toBe(3)
+    expect(base.binaryFind([2], 2)).toBe(0)
+  })
+})
+
+/**
+ * 测试 quickSort
+ */
+describe('test quickSort', () => {
+  test('quickSort', () => {
+    let arr = [1, 2, 4, 632, 24]
+    base.quickSort(arr, 0, arr.length - 1)
+    expect(arr).toEqual([1, 2, 4, 24, 632])
+  })
+  test('quickSort single', () => {
+    let arr = [1]
+    base.quickSort(arr, 0, arr.length - 1)
+    expect(arr).toEqual([1])
+  })
+})

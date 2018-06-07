@@ -1,3 +1,5 @@
+const MAX_SAFE_INTEGER = 9007199254740991
+const MAX_ARRAY_LENGTH = 4294967295
 class Base {
   /**
    * 获取指定的 querystring 中指定 name 的 value
@@ -197,6 +199,131 @@ class Base {
     } else {
       return false
     }
+  }
+
+  /**
+   * 判断是否是原型
+   * @param value
+   * @returns {boolean}
+   */
+  isPrototype (value) {
+    const ctor = value && value.constructor
+    const proto = (typeof ctor === 'function' && ctor.prototype) || Object.prototype
+
+    return value === proto
+  }
+
+  /**
+   * 判断是否是对象
+   * @param value
+   * @returns {boolean}
+   */
+  isObject (value) {
+    const type = typeof value
+    return value != null && (type === 'object' || type === 'function')
+  }
+  /**
+   * 判断数组，对象是否是空
+   * @param value
+   * @returns {boolean}
+   */
+  isEmpty (value) {
+    if (value === null) {
+      return true
+    }
+    if (Array.isArray(value) || this.isString(value)) {
+      return !value.length
+    }
+    if (this.isPrototype(value)) {
+      return !Object.keys(value).length
+    }
+    for (const key in value) {
+      if (Object.hasOwnProperty.call(value, key)) {
+        return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * 执行指定次数
+   * @param n
+   * @param iteratee
+   * @returns {Array}
+   */
+  times (n, iteratee) {
+    if (n < 1 || n > MAX_SAFE_INTEGER) {
+      return []
+    }
+    let index = -1
+    const length = Math.min(n, MAX_ARRAY_LENGTH)
+    const result = new Array(length)
+    while (++index < length) {
+      result[index] = iteratee(index)
+    }
+    index = MAX_ARRAY_LENGTH
+    n -= MAX_ARRAY_LENGTH
+    while (++index < n) {
+      iteratee(index)
+    }
+    return result
+  }
+
+  /**
+   * 二分法查找值
+   * @param {Any} key
+   * @param {Array} array
+   * @return {Number}
+   */
+  binaryFind (array, key) {
+    let left = 0
+    let right = array.length - 1
+
+    while (left <= right) {
+      let mid = Math.floor((left + right) / 2)
+      if (array[mid] === key) {
+        return mid
+      } else if (array[mid] < key) {
+        left = mid + 1
+      } else {
+        right = mid - 1
+      }
+    }
+
+    return -1
+  }
+
+  /**
+   * 快排
+   * @param array
+   * @param left
+   * @param right
+   */
+  quickSort (array, left, right) {
+    if (left >= right) {
+      return
+    }
+    let i = left
+    let j = right
+    let key = array[left]
+    while (i < j) {
+      while (i < j && array[j] > key) {
+        j--
+      }
+      array[i] = array[j]
+      // 从后往前找到第一个比key小的数与array[i]交换；
+      while (i < j && array[i] < key) {
+        i++
+      }
+      array[j] = array[i]
+      // 从前往后找到第一个比key大的数与array[j]交换；
+    }
+    array[i] = key
+    // 一趟快排之后已经将key的位置找到。
+    this.quickSort(array, left, i - 1)
+    // 对key左边的进行排序
+    this.quickSort(array, i + 1, right)
+    // 对key右边的进行排序
   }
 }
 module.exports = Base
