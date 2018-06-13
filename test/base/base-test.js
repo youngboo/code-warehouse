@@ -432,3 +432,25 @@ describe('test quickSort', () => {
     expect(arr).toEqual([1])
   })
 })
+
+/**
+ * 测试 delHtmlTag
+ */
+describe('test delHtmlTag', () => {
+  test('delHtmlTag all', () => {
+    let text = '<div>1<p>2</p><span>3</span></div>4'
+    text = base.delHtmlTag(text)
+    expect(text).toEqual('1234')
+  })
+})
+
+/**
+ * 测试 htmlEncode
+ */
+describe('test htmlEncode', () => {
+  test('htmlEncode', () => {
+    let text = '<div>1<p>2</p><span>3</span></div>4'
+    text = base.htmlEncode(text)
+    expect(text).toEqual('&lt;div&gt;1&lt;p&gt;2&lt;/p&gt;&lt;span&gt;3&lt;/span&gt;&lt;/div&gt;4')
+  })
+})

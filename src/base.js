@@ -321,5 +321,28 @@ class Base {
     this.quickSort(array, left, i - 1)
     this.quickSort(array, i + 1, right)
   }
+
+   delHtmlTag(text) {
+    const delTagReg = /<\/?.*?>/g
+    text = text.replace(delTagReg,'')
+    return text
+  }
+
+   htmlEncode(text) {
+    text = text
+      .replace(/;/g,'')
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;')
+      .replace(/\s/g,'&nbsp;')
+    return text
+  }
+   checkReferrer(ctx) {
+    let referrer = ctx.request.get('referrer')
+    const host = 'http://'+ ctx.request.host;
+    return referrer.startsWith(host)
+  }
 }
 module.exports = Base
