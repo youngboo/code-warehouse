@@ -1,6 +1,6 @@
 {
   "name": "code-warehouse",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "my first npm package",
   "main": "index.js",
   "scripts": {
