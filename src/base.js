@@ -137,18 +137,16 @@ class Base {
    * @return {String}
    *
    * getAbsoluteUrl('/jerojiang') => 'http://imweb.io/jerojiang'
-   * 在当前页面获取绝对路径，这里要创建 A 元素，测试用例看你们的了
    */
   getAbsoluteUrl (url) {
     if (!(this.isString(url) && url.match(/^\/\w+/))) {
       return null
     }
-    return location.host + url
+    return location ? location.host + url : null
   }
 
   /**
    * 防抖动
-   * 防抖动函数了啦，有做个这个习题，不清楚回去复习
    */
   debounce (callback, time) {
     time = time || 300
