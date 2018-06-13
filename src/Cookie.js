@@ -22,7 +22,7 @@ class Cookie {
   static set (key, value) {
     key = encodeURIComponent(key)
     value = encodeURIComponent(value)
-    document.cookie = `${key}=${value};path=/;domain=ke.baidu.com`
+    document.cookie = `${key}=${value}`
   }
   static remove (key) {
     let cookie = Cookie.find(key)

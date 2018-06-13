@@ -322,12 +322,22 @@ class Base {
     this.quickSort(array, i + 1, right)
   }
 
+  /**
+   * 清除所有的html标签
+   * @param text
+   * @return {XML|void|*|string}
+   */
    delHtmlTag(text) {
     const delTagReg = /<\/?.*?>/g
     text = text.replace(delTagReg,'')
     return text
   }
 
+  /**
+   * htmlEncode实现
+   * @param text
+   * @return {XML|string|*}
+   */
    htmlEncode(text) {
     text = text
       .replace(/;/g,'')
@@ -338,11 +348,6 @@ class Base {
       .replace(/'/g,'&#39;')
       .replace(/\s/g,'&nbsp;')
     return text
-  }
-   checkReferrer(ctx) {
-    let referrer = ctx.request.get('referrer')
-    const host = 'http://'+ ctx.request.host;
-    return referrer.startsWith(host)
   }
 }
 module.exports = Base
